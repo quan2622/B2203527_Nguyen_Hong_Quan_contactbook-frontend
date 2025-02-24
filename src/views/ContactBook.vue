@@ -35,7 +35,7 @@
           Chi tiết Liên hệ
           <i class="fas fa-address-card"></i>
         </h4>
-        <ContactCard :contact="activeContact" />
+        <ContactCard :contact="activeContact" :key="activeContact._id"/>
         <router-link
           :to="{
             name: 'contact.edit',
@@ -67,8 +67,8 @@ export default {
     return {
       contacts: [],
       activeIndex: -1,
-      searchText: '',
-    }
+      searchText: "",
+    };
   },
   watch: {
     searchText() {
@@ -78,23 +78,23 @@ export default {
   computed: {
     contactStrings() {
       return this.contacts.map((contact) => {
-        const {name, email, address, phone} = contact
-        return [name, email, address, phone].join('')
-      })
+        const { name, email, address, phone } = contact;
+        return [name, email, address, phone].join("");
+      });
     },
 
     filteredContacts() {
       if (!this.searchText) return this.contacts
       return this.contacts.filter((_contact, index) => {
         return this.contactStrings[index].includes(this.searchText)
-      })
+      });
     },
     activeContact() {
       if (this.activeIndex < 0) return null
-      return this.filteredContacts[this.activeIndex]
+      return this.filteredContacts[this.activeIndex];
     },
     filteredContactsCount() {
-      return this.filteredContacts.length
+      return this.filteredContacts.length;
     },
   },
   methods: {

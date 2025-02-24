@@ -35,9 +35,19 @@
           Chi tiết Liên hệ
           <i class="fas fa-address-card"></i>
         </h4>
-        <ContactCard :contact="activeContact" />  
+        <ContactCard :contact="activeContact" />
+        <router-link
+          :to="{
+            name: 'contact.edit',
+            params: { id: activeContact._id }
+          }"
+        >
+        <span class="mt-2 badge badge-warning">
+          <i class="fas fa-edit"></i> Hiệu chỉnh
+        </span>
+      </router-link>
       </div>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -57,74 +67,74 @@ export default {
     return {
       contacts: [],
       activeIndex: -1,
-      searchText: "",
-    };
+      searchText: '',
+    }
   },
   watch: {
     searchText() {
-      this.activeIndex = -1;
+      this.activeIndex = -1
     },
   },
   computed: {
     contactStrings() {
       return this.contacts.map((contact) => {
-        const { name, email, address, phone } = contact;
-        return [name, email, address, phone].join("");
-      });
+        const {name, email, address, phone} = contact
+        return [name, email, address, phone].join('')
+      })
     },
 
     filteredContacts() {
-      if (!this.searchText) return this.contacts;
+      if (!this.searchText) return this.contacts
       return this.contacts.filter((_contact, index) => {
         return this.contactStrings[index].includes(this.searchText)
-      });
+      })
     },
     activeContact() {
-      if (this.activeIndex < 0) return null;
-      return this.filteredContacts[this.activeIndex];
+      if (this.activeIndex < 0) return null
+      return this.filteredContacts[this.activeIndex]
     },
     filteredContactsCount() {
-      return this.filteredContacts.length;
+      return this.filteredContacts.length
     },
   },
   methods: {
     async retrieveContacts() {
       try {
-        this.contacts = await ContactService.getAll();
+        this.contacts = await ContactService.getAll()
       } catch (error) {
-        console.log(error);
-      };
+        console.log(error)
+      }
     },
 
     refreshList() {
-      this.retrieveContacts();
-      this.activeIndex = -1;
+      this.retrieveContacts()
+      this.activeIndex = -1
     },
 
     async removeAllContacts() {
-      if (confirm("Bạn muốn xóa tất cả các liên hệ!")) {
+      if (confirm('Bạn muốn xóa tất cả các liên hệ!')) {
         try {
-          await ContactService.deleteAll();
-          this.refreshList();
+          await ContactService.deleteAll()
+          this.refreshList()
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       }
     },
 
     goToAddContact() {
-      this.$router.push({ name: "contact.add" });
+      this.$router.push({name: 'contact.add'})
     },
   },
   mounted() {
-    this.refreshList();
+    this.refreshList()
   },
 }
 </script>
 
 <style scoped>
-  .page {
-    text-align: left;
-    max-width: 750px;
-  }
+.page {
+  text-align: left;
+  max-width: 750px;
+}
 </style>
